@@ -1,5 +1,6 @@
 import React from "react";
-import Myinfo from "./Myinfo";
+import AddUserInfo from "./AddUserInfo";
+import "./DisplayInfo.scss";
 
 class DisplayInfo extends React.Component {
   state = {
@@ -13,7 +14,7 @@ class DisplayInfo extends React.Component {
   render() {
     const { listUsers } = this.props;
     return (
-      <div>
+      <div className="displayinfor-container">
         <div>
           <button
             onClick={(event) => {
