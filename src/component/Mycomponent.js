@@ -17,13 +17,25 @@ class Mycomponent extends React.Component {
     });
   };
 
+  handleDelelteUser = (userId) => {
+    let listUsersClones = this.state.listUsers;
+    listUsersClones = listUsersClones.filter((item) => item.id !== userId);
+    this.setState({
+      listUsers: listUsersClones,
+    });
+  };
+
   render() {
     return (
       <div>
+        {/* <img src={Logo} /> */}
         <AddUserInfo handleAddUserInfo={this.handleAddUserInfo} />
         <br></br>
         <br></br>
-        <DisplayInfo listUsers={this.state.listUsers} />
+        <DisplayInfo
+          listUsers={this.state.listUsers}
+          handleDelelteUser={this.handleDelelteUser}
+        />
       </div>
     );
   }
