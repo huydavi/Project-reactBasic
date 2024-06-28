@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AddUserInfo from "./AddUserInfo";
 import "./DisplayInfo.scss";
 import Logo from "./../logo.svg";
@@ -54,10 +54,29 @@ import Logo from "./../logo.svg";
 
 const DisplayInfo = (props) => {
   const { listUsers } = props;
+  const [isShowHideListUsers, setIsShowHideListUsers] = useState(true);
+  const handleShowHideListUser = () => {
+    setIsShowHideListUsers(!isShowHideListUsers);
+  };
+
+  useEffect(() => {
+    // setTimeout(() => {
+    //   document.title = "Huy and ĐH";
+    // }, 3000);
+    if (listUsers.length === 0) {
+      alert("you deleted all user");
+    }
+  }, [listUsers]);
+
   return (
     <div className="displayinfor-container">
       {/* <img src={Logo} /> */}
-      {true && (
+      <div>
+        <button onClick={() => handleShowHideListUser()}>
+          {isShowHideListUsers === true ? "Hide list user" : "Show list user"}
+        </button>
+      </div>
+      {isShowHideListUsers && (
         <>
           {listUsers.map((item) => {
             return (
