@@ -2,12 +2,21 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaFolderPlus } from "react-icons/fa";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const ModalCreatNewUsers = () => {
-  const [show, setShow] = useState(false);
+const ModalCreatNewUsers = (props) => {
+  const { show, setShow } = props;
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setShow(false);
+    setEmail("");
+    setPassword("");
+    setUsername("");
+    setRole("User");
+    setImage("");
+    setPreviewImage("");
+  };
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,14 +28,58 @@ const ModalCreatNewUsers = () => {
   const handleUploadImage = (event) => {
     if (event.target && event.target.files && event.target.files[0]) {
       setPreviewImage(URL.createObjectURL(event.target.files[0]));
+      setImage(event.target.files[0]);
+    } else {
+    }
+  };
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  const handleSubmitCreateUsers = async () => {
+    const isvalidateEmail = validateEmail(email);
+
+    if (!isvalidateEmail) {
+      toast.error("Invalid Email");
+      return;
+    }
+
+    if (!password) {
+      toast.error("Please type password");
+      return;
+    }
+
+    const data = new FormData();
+    data.append("email", email);
+    data.append("password", password);
+    data.append("username", username);
+    data.append("role", role);
+    data.append("userImage", image);
+
+    let res = await axios.post(
+      "http://localhost:8081/api/v1/participant",
+      data
+    );
+    console.log(res.data);
+    if (res.data && res.data.EC === 0) {
+      toast.success(res.data.EM);
+      handleClose();
+    }
+    if (res.data && res.data.EC !== 0) {
+      toast.error(res.data.EM);
     }
   };
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      {/* <Button variant="primary" onClick={handleShow}>
         Launch demo modal
-      </Button>
+      </Button> */}
 
       <Modal
         show={show}
@@ -99,18 +152,13 @@ const ModalCreatNewUsers = () => {
                 <span>Preview Image</span>
               )}
             </div>
-            <div className="col-12">
-              <button type="submit" className="btn btn-primary">
-                Sign in
-              </button>
-            </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={() => handleSubmitCreateUsers()}>
             Save
           </Button>
         </Modal.Footer>
