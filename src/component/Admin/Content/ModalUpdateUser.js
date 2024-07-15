@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaFolderPlus } from "react-icons/fa";
-import { postCreateNewUser } from "../../../service/apiService";
+import { putUpdateUser } from "../../../service/apiService";
 import { toast } from "react-toastify";
 import _ from "lodash";
 
@@ -63,12 +63,7 @@ const ModalUpdateUser = (props) => {
       return;
     }
 
-    if (!password) {
-      toast.error("Please type password");
-      return;
-    }
-
-    let data = await postCreateNewUser(email, password, username, role, image);
+    let data = await putUpdateUser(dataUpdate.id, username, role, image);
     if (data && data.EC === 0) {
       toast.success(data.EM);
       handleClose();
@@ -104,6 +99,7 @@ const ModalUpdateUser = (props) => {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 className="form-control"
+                disabled
               />
             </div>
             <div className="col-md-6">
@@ -113,6 +109,7 @@ const ModalUpdateUser = (props) => {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 className="form-control"
+                disabled
               />
             </div>
             <div className="col-md-6">
