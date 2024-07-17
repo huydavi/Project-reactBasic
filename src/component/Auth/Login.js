@@ -1,14 +1,32 @@
 import { useState } from "react";
 import "./Login.scss";
-import { postLogin } from "../service/apiService";
+import { postLogin } from "../../service/apiService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
   const handleLogin = async () => {
     //validate
+    const isvalidateEmail = validateEmail(email);
+
+    if (!isvalidateEmail) {
+      toast.error("Invalid Email");
+      return;
+    }
+
+    if (!password) {
+      toast.error("Please type password");
+      return;
+    }
     //submit login
     let data = await postLogin(email, password);
     if (data && data.EC === 0) {
@@ -23,7 +41,13 @@ const Login = () => {
     <div className="login-container">
       <div className="header">
         <span>Don't have an account yet?</span>
-        <button>Sign Up</button>
+        <button
+          onClick={() => {
+            navigate("/register");
+          }}
+        >
+          Sign Up
+        </button>
       </div>
       <div className="title col-4 mx-auto">HoiDanIT</div>
       <div className="welcome col-4 mx-auto">Hello, who’s this?</div>

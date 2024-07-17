@@ -3,10 +3,11 @@ import Admin from "./component/Admin/Admin";
 import Homepage from "./component/Home/Homepage";
 import Dashboard from "./component/Admin/Content/DashBoard";
 import ManageUser from "./component/Admin/Content/ManageUser";
-import Login from "./Auth/Login";
+import Login from "./component/Auth/Login";
 import { Routes, Route } from "react-router-dom";
 import App from "./App";
 import { ToastContainer } from "react-toastify";
+import Register from "./component/Auth/Register";
 const Layout = () => {
   return (
     <>
@@ -21,6 +22,7 @@ const Layout = () => {
           <Route path="manage-users" element={<ManageUser />} />
         </Route>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
       <ToastContainer
         position="top-right"
