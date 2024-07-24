@@ -49,6 +49,22 @@ const postRegister = (email, password, username) => {
   });
 };
 
+const getQuizByUser = () => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIxODI0NzI0LCJleHAiOjE3NTMzNjA3MjR9.9CgvzPLgLw8KbPlKKji6ZvIHLZZyC3rlF8lPWhmCM-w";
+  return axios.get("http://localhost:8081/api/v1/quiz-by-participant", {
+    headers: { Authorization: `Bearer ${tokenStr}` },
+  });
+};
+
+const getDataQuiz = (id) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIxODI0NzI0LCJleHAiOjE3NTMzNjA3MjR9.9CgvzPLgLw8KbPlKKji6ZvIHLZZyC3rlF8lPWhmCM-w";
+  return axios.get(`/api/v1/questions-by-quiz?quizId=${id}`, {
+    headers: { Authorization: `Bearer ${tokenStr}` },
+  });
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -57,4 +73,6 @@ export {
   getUserWithPaginate,
   postLogin,
   postRegister,
+  getQuizByUser,
+  getDataQuiz,
 };
