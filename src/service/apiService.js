@@ -65,6 +65,61 @@ const getDataQuiz = (id) => {
   });
 };
 
+const postSubmitQuiz = (data) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIyMjMxMTA2LCJleHAiOjE3NTM3NjcxMDZ9.taOzqLHH4q6LLyE6QmY2_Mbibvv5SHx2i3EbGYloKWI";
+  return axios.post(
+    "/api/v1/quiz-submit",
+    { ...data },
+    {
+      headers: { Authorization: `Bearer ${tokenStr}` },
+    }
+  );
+};
+
+const postCreateNewQuiz = (description, name, difficulty, image) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIyMjMxMTA2LCJleHAiOjE3NTM3NjcxMDZ9.taOzqLHH4q6LLyE6QmY2_Mbibvv5SHx2i3EbGYloKWI";
+  const data = new FormData();
+  data.append("description", description);
+  data.append("name", name);
+  data.append("difficulty", difficulty);
+  data.append("quizImage", image);
+  return axios.post("/api/v1/quiz", data, {
+    headers: { Authorization: `Bearer ${tokenStr}` },
+  });
+};
+
+const getAllQuizForAdmin = () => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIyMzI0MzgxLCJleHAiOjE3NTM4NjAzODF9.N2KNFujTNczWAk-l23oQqdosNFtrnpvU3FgpzYwRz74";
+  return axios.get("http://localhost:8081/api/v1/quiz/all", {
+    headers: { Authorization: `Bearer ${tokenStr}` },
+  });
+};
+
+const putUpdateQuizForAdmin = (id, name, description, difficulty, image) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIyMzI5ODM2LCJleHAiOjE3NTM4NjU4MzZ9.crFXOysVzbMs-FOxC57isRjhU_79nGuWY0lCkKtO-Ps";
+  const data = new FormData();
+  data.append("id", id);
+  data.append("description", description);
+  data.append("name", name);
+  data.append("difficulty", difficulty);
+  data.append("quizImage", image);
+  return axios.put("api/v1/quiz", data, {
+    headers: { Authorization: `Bearer ${tokenStr}` },
+  });
+};
+
+const deleteQuizForAdmin = (id) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIyMzI5ODM2LCJleHAiOjE3NTM4NjU4MzZ9.crFXOysVzbMs-FOxC57isRjhU_79nGuWY0lCkKtO-Ps";
+  return axios.delete(`/api/v1/quiz/${id}`, {
+    headers: { Authorization: `Bearer ${tokenStr}` },
+  });
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -75,4 +130,9 @@ export {
   postRegister,
   getQuizByUser,
   getDataQuiz,
+  postSubmitQuiz,
+  postCreateNewQuiz,
+  getAllQuizForAdmin,
+  putUpdateQuizForAdmin,
+  deleteQuizForAdmin,
 };
