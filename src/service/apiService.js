@@ -120,6 +120,34 @@ const deleteQuizForAdmin = (id) => {
   });
 };
 
+const postCreatNewQuestionForQuiz = (quiz_id, description, questionImage) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIyNjk3ODM5LCJleHAiOjE3NTQyMzM4Mzl9.LjfgejLy5RBRzXHVosictGGEZyRW83fe4c2bPkZmVc4";
+  const data = new FormData();
+  data.append("quiz_id", quiz_id);
+  data.append("description", description);
+  data.append("questionImage", questionImage);
+  return axios.post("api/v1/question", data, {
+    headers: { Authorization: `Bearer ${tokenStr}` },
+  });
+};
+
+const postCreatNewAnswerForQuestion = (
+  description,
+  correct_answer,
+  question_id
+) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIyNjk3ODM5LCJleHAiOjE3NTQyMzM4Mzl9.LjfgejLy5RBRzXHVosictGGEZyRW83fe4c2bPkZmVc4";
+  return axios.post(
+    "api/v1/answer",
+    { description, correct_answer, question_id },
+    {
+      headers: { Authorization: `Bearer ${tokenStr}` },
+    }
+  );
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -135,4 +163,6 @@ export {
   getAllQuizForAdmin,
   putUpdateQuizForAdmin,
   deleteQuizForAdmin,
+  postCreatNewQuestionForQuiz,
+  postCreatNewAnswerForQuestion,
 };

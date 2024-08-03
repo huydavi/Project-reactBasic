@@ -20,7 +20,7 @@ const Question = (props) => {
         <div className="q-image"></div>
       )}
       <div className="question">
-        Question {index + 1}: {data.description}
+        Question {index + 1}: {data.questionDescription}
       </div>
       <div className="answer">
         {data.answers &&

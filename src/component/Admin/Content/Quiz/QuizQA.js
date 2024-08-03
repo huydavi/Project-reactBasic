@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Select from "react-select";
-import "./Questions.scss";
+import "./QuizQA.scss";
 import { BsFillPatchPlusFill } from "react-icons/bs";
 import { BsPatchMinusFill } from "react-icons/bs";
 import { AiOutlineMinusCircle } from "react-icons/ai";
@@ -16,7 +16,7 @@ import {
 } from "../../../../service/apiService";
 import { toast } from "react-toastify";
 
-const Questions = (props) => {
+const QuizQA = (props) => {
   // const options = [
   //   { value: "chocolate", label: "Chocolate" },
   //   { value: "strawberry", label: "Strawberry" },
@@ -229,7 +229,7 @@ const Questions = (props) => {
       let newQuiz = res.DT.map((item) => {
         return {
           value: item.id,
-          label: `${item.id} - ${item.description}`,
+          label: item.description,
         };
       });
       setListQuiz(newQuiz);
@@ -237,8 +237,6 @@ const Questions = (props) => {
   };
   return (
     <div className="questions-container">
-      <div className="title">Manage Questions</div>
-      <hr />
       <div className="add-new-question">
         <div className="col-6 form-group">
           <label className="mb-2">Select Quiz:</label>
@@ -396,4 +394,4 @@ const Questions = (props) => {
   );
 };
 
-export default Questions;
+export default QuizQA;
