@@ -3,7 +3,9 @@ import Select from "react-select";
 import {
   getAllQuizForAdmin,
   getAllUsers,
+  postAssignQuiz,
 } from "../../../../service/apiService";
+import { toast } from "react-toastify";
 
 const AssignQuiz = () => {
   const [selectedQuiz, setSelectedQuiz] = useState({});
@@ -23,7 +25,7 @@ const AssignQuiz = () => {
       let newQuiz = res.DT.map((item) => {
         return {
           value: item.id,
-          label: item.description,
+          label: `${item.id} - ${item.name}`,
         };
       });
       setListQuiz(newQuiz);
@@ -40,6 +42,15 @@ const AssignQuiz = () => {
         };
       });
       setListUser(users);
+    }
+  };
+
+  const handleAssign = async () => {
+    let res = await postAssignQuiz(selectedQuiz.value, selectedUser.value);
+    if (res && res.EC === 0) {
+      toast.success(res.EM);
+    } else {
+      toast.error(res.EM);
     }
   };
   return (
@@ -61,7 +72,9 @@ const AssignQuiz = () => {
         />
       </div>
       <div>
-        <button className="btn btn-warning mt-3">Assign</button>
+        <button onClick={() => handleAssign()} className="btn btn-warning mt-3">
+          Assign
+        </button>
       </div>
     </div>
   );

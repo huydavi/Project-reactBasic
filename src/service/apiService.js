@@ -148,6 +148,26 @@ const postCreatNewAnswerForQuestion = (
   );
 };
 
+const postAssignQuiz = (quizId, userId) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIyNzkzOTQ5LCJleHAiOjE3NTQzMjk5NDl9.DcgXn0cXTUAqxSK8SxW9aBYTjICw62bLep2WhDxwLLY";
+  return axios.post(
+    "api/v1/quiz-assign-to-user",
+    { quizId, userId },
+    {
+      headers: { Authorization: `Bearer ${tokenStr}` },
+    }
+  );
+};
+
+const getQuizWithQA = (quizId) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIyNzkzOTQ5LCJleHAiOjE3NTQzMjk5NDl9.DcgXn0cXTUAqxSK8SxW9aBYTjICw62bLep2WhDxwLLY";
+  return axios.get(`http://localhost:8081/api/v1/quiz-with-qa/${quizId}`, {
+    headers: { Authorization: `Bearer ${tokenStr}` },
+  });
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -165,4 +185,6 @@ export {
   deleteQuizForAdmin,
   postCreatNewQuestionForQuiz,
   postCreatNewAnswerForQuestion,
+  postAssignQuiz,
+  getQuizWithQA,
 };
