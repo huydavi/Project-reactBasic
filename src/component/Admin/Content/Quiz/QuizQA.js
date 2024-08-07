@@ -12,11 +12,9 @@ import Lightbox from "react-awesome-lightbox";
 import {
   getAllQuizForAdmin,
   getQuizWithQA,
+  postUpsertQA,
 } from "../../../../service/apiService";
-import {
-  postCreatNewQuestionForQuiz,
-  postCreatNewAnswerForQuestion,
-} from "../../../../service/apiService";
+
 import { toast } from "react-toastify";
 
 const QuizQA = (props) => {
@@ -155,72 +153,15 @@ const QuizQA = (props) => {
     }
   };
 
-  const handleSubmitQuestionForQuiz = async () => {
-    //validated
-    if (_.isEmpty(selectedQuiz)) {
-      toast.error("Please choose a quiz!");
-      return;
-    }
-
-    //validated answer
-    let isValidAnswer = true;
-    let indexQ = 0;
-    let indexA = 0;
-    for (let i = 0; i < questions.length; i++) {
-      for (let j = 0; j < questions[i].answers.length; j++) {
-        if (!questions[i].answers[j].description) {
-          isValidAnswer = false;
-          indexA = j;
-          break;
-        }
-      }
-      indexQ = i;
-      if (isValidAnswer === false) break;
-    }
-
-    if (isValidAnswer === false) {
-      toast.error(`Not empty Answer ${indexA + 1} at Question ${indexQ + 1}`);
-      return;
-    }
-
-    //validated question
-    let isValidQ = true;
-    let indexQ1 = 0;
-    for (let i = 0; i < questions.length; i++) {
-      if (!questions[i].description) {
-        isValidQ = false;
-        indexQ1 = i;
-        break;
-      }
-    }
-
-    if (isValidQ === false) {
-      toast.error(`Not empty Description for question ${indexQ1 + 1}`);
-      return;
-    }
-
-    //submit question
-    for (const question of questions) {
-      const q = await postCreatNewQuestionForQuiz(
-        +selectedQuiz.value,
-        question.description,
-        question.imageFile
-      );
-      for (const answer of question.answers) {
-        await postCreatNewAnswerForQuestion(
-          answer.description,
-          answer.isCorrect,
-          q.DT.id
-        );
-      }
-    }
-
-    toast.success("Create Question and Answer succced");
-    setQuestions(initQuestions);
-  };
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
 
   const [selectedQuiz, setSelectedQuiz] = useState({});
-  console.log(selectedQuiz);
 
   const [listQuiz, setListQuiz] = useState([]);
 
@@ -273,6 +214,72 @@ const QuizQA = (props) => {
       setListQuiz(newQuiz);
     }
   };
+
+  const handleSubmitQuestionForQuiz = async () => {
+    //validated
+    if (_.isEmpty(selectedQuiz)) {
+      toast.error("Please choose a quiz!");
+      return;
+    }
+
+    //validated answer
+    let isValidAnswer = true;
+    let indexQ = 0;
+    let indexA = 0;
+    for (let i = 0; i < questions.length; i++) {
+      for (let j = 0; j < questions[i].answers.length; j++) {
+        if (!questions[i].answers[j].description) {
+          isValidAnswer = false;
+          indexA = j;
+          break;
+        }
+      }
+      indexQ = i;
+      if (isValidAnswer === false) break;
+    }
+
+    if (isValidAnswer === false) {
+      toast.error(`Not empty Answer ${indexA + 1} at Question ${indexQ + 1}`);
+      return;
+    }
+
+    //validated question
+    let isValidQ = true;
+    let indexQ1 = 0;
+    for (let i = 0; i < questions.length; i++) {
+      if (!questions[i].description) {
+        isValidQ = false;
+        indexQ1 = i;
+        break;
+      }
+    }
+
+    if (isValidQ === false) {
+      toast.error(`Not empty Description for question ${indexQ1 + 1}`);
+      return;
+    }
+
+    let questionsClone = _.cloneDeep(questions);
+    for (let i = 0; i < questionsClone.length; i++) {
+      if (questionsClone[i].imageFile) {
+        questionsClone[i].imageFile = await toBase64(
+          questionsClone[i].imageFile
+        );
+      }
+    }
+
+    //submit question
+    let res = await postUpsertQA({
+      quizId: selectedQuiz.value,
+      questions: questionsClone,
+    });
+
+    if (res && res.EC === 0) {
+      toast.success(res.EM);
+      fetchQuizWithQA();
+    }
+  };
+
   return (
     <div className="questions-container">
       <div className="add-new-question">

@@ -168,6 +168,18 @@ const getQuizWithQA = (quizId) => {
   });
 };
 
+const postUpsertQA = (data) => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIzMDExMDU5LCJleHAiOjE3NTQ1NDcwNTl9.ectB91UD9JHbpOaNJlHfLzm9qjihwoZf0sXP5XRqTY0";
+  return axios.post(
+    `/api/v1/quiz-upsert-qa`,
+    { ...data },
+    {
+      headers: { Authorization: `Bearer ${tokenStr}` },
+    }
+  );
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -187,4 +199,5 @@ export {
   postCreatNewAnswerForQuestion,
   postAssignQuiz,
   getQuizWithQA,
+  postUpsertQA,
 };
