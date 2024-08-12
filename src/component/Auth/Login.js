@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userAction";
 import { ImSpinner10 } from "react-icons/im";
+import Language from "../Header/Language";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -48,6 +49,13 @@ const Login = () => {
       setIsLoading(false);
     }
   };
+
+  const handleKeyDown = (event) => {
+    if (event && event.key === "Enter") {
+      handleLogin();
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="header">
@@ -59,6 +67,7 @@ const Login = () => {
         >
           Sign Up
         </button>
+        <Language />
       </div>
       <div className="title col-4 mx-auto">HoiDanIT</div>
       <div className="welcome col-4 mx-auto">Hello, who’s this?</div>
@@ -79,6 +88,7 @@ const Login = () => {
             value={password}
             type={"password"}
             className="form-control"
+            onKeyDown={(event) => handleKeyDown(event)}
           />
         </div>
         <span className="forgot-password">Forgot password?</span>
