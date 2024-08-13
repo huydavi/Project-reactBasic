@@ -184,6 +184,14 @@ const LogOut = (email, refresh_token) => {
   return axios.post("/api/v1/logout", { email, refresh_token });
 };
 
+const getOverview = () => {
+  let tokenStr =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpZCI6MiwiaWF0IjoxNzIzNTUzNzY2LCJleHAiOjE3NTUwODk3NjZ9.x1LgbxDvmgR-2dgi_3CLBH9kyAjadTJbHeIlp27VRDY";
+  return axios.get("api/v1/overview", {
+    headers: { Authorization: `Bearer ${tokenStr}` },
+  });
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -205,4 +213,5 @@ export {
   getQuizWithQA,
   postUpsertQA,
   LogOut,
+  getOverview,
 };
